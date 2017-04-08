@@ -150,9 +150,10 @@ function OnTick()
             if (player_object ~= 0) then
                 -- validate coordinates table
                 if coordinates[mapname] ~= nil then
+                    local foundCoordinates
                     for j = 1, #coordinates[mapname] do
                         if player_alive(i) then
-                            if coordinates[mapname] ~= { } and coordinates[mapname][j] ~= nil then
+                            if not next(coordinates[mapname]) and coordinates[mapname][j] ~= nil then
                                 -- check if player is in kill zone
                                 if GEOinSpherePlayer(i, coordinates[mapname][j][3], coordinates[mapname][j][4], coordinates[mapname][j][5], coordinates[mapname][j][6]) == true then
                                     -- Check player's team and varify against table data
@@ -162,6 +163,11 @@ function OnTick()
                                         -- monitor warning timer until it reaches the value of "Warning Dealy" (coordinates[mapname][j][7])
                                         if players[get_var(i, "$n")].warning_timer >= math.floor(coordinates[mapname][j][7]) then
                                             -- clear the player's console to prevent duplicate messages (spam)
+                                            
+                                            foundCoordinates = coordinates[mapname][j]
+                                            
+                                            
+                                            -- move all of this out of the loop
                                             ClearConsole(i)
                                             local minutes, seconds = secondsToTime(players[get_var(i, "$n")].warning_timer, 2)
                                             -- initiate kill timer
@@ -209,6 +215,13 @@ function OnTick()
                             end
                         end
                     end
+                    
+                    if foundCoordinates then
+                        -- put all of that code here
+                        
+                    end
+                    
+                    
                 end
             end
         end
